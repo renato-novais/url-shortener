@@ -38,6 +38,15 @@ Sobe o WildFly 10 já com o WAR implantado. Acesse:
 5. Na aba **Deployment**, adicione o artefato `url-shortener:war exploded`.
 6. Rode. A aplicação sobe em `http://localhost:8080/url-shortener/`.
 
+### Opção C — Eclipse + WildFly local
+
+1. `File > Import > Maven > Existing Maven Projects`, selecione a raiz do projeto.
+2. Garanta um JRE 8 instalado e configurado em `Window > Preferences > Java > Installed JREs` (adicione se não existir), no projeto, `Build Path > Configure Build Path > Libraries`, confirme que o JRE System Library aponta pra essa instalação.
+3. Instale o **JBoss Tools** (ou o **Eclipse WTP** com adapter WildFly) via `Help > Eclipse Marketplace`, se ainda não tiver.
+4. `Window > Show View > Servers`, botão direito > `New > Server`, escolha **WildFly 10**, aponte pro diretório onde você extraiu o WildFly 10.1.0.Final.
+5. Arraste o projeto `url-shortener` pro servidor criado (ou botão direito no servidor > `Add and Remove...` > adicione o projeto).
+6. Inicie o servidor. A aplicação sobe em `http://localhost:8080/url-shortener/`.
+
 ### Rodando os testes
 
 ```bash
