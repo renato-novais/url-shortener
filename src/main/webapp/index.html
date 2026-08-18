@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>URL Shortener</title>
+<style>
+  body { font-family: sans-serif; max-width: 480px; margin: 40px auto; padding: 0 16px; }
+  input { width: 100%; padding: 8px; margin-bottom: 12px; }
+  button { padding: 8px 16px; }
+  #result { margin-top: 16px; }
+  #result.error { color: red; }
+</style>
+</head>
+<body>
+  <h1>Encurtador de URLs</h1>
+
+  <form id="shorten-form">
+    <label for="url">URL original</label>
+    <input type="text" id="url" name="url" placeholder="https://exemplo.com/pagina" required>
+
+    <label for="alias">Alias (opcional)</label>
+    <input type="text" id="alias" name="alias" placeholder="meu-link">
+
+    <button type="submit">Encurtar</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    const form = document.getElementById('shorten-form');
+    const result = document.getElementById('result');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const url = document.getElementById('url').value.trim();
+      const alias = document.getElementById('alias').value.trim();
+
+      result.className = '';
+      result.textContent = 'Encurtando...';
+
+      try {
+        const response = await fetch('api/urls', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url, alias: alias || null })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Erro inesperado');
+        }
+
+        result.innerHTML = `<a href="${data.shortUrl}" target="_blank">${data.shortUrl}</a>`;
+      } catch (err) {
+        result.className = 'error';
+        result.textContent = err.message;
+      }
+    });
+  </script>
+</body>
+</html>
