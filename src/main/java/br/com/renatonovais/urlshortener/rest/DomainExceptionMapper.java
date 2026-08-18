@@ -7,9 +7,13 @@ import br.com.renatonovais.urlshortener.exception.ShortUrlNotFoundException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Provider
 public class DomainExceptionMapper implements ExceptionMapper<RuntimeException> {
+
+    private static final Logger LOGGER = Logger.getLogger(DomainExceptionMapper.class.getName());
 
     @Override
     public Response toResponse(RuntimeException exception) {
@@ -22,6 +26,7 @@ public class DomainExceptionMapper implements ExceptionMapper<RuntimeException> 
         if (exception instanceof AliasAlreadyInUseException) {
             return build(Response.Status.CONFLICT, exception.getMessage());
         }
+        LOGGER.log(Level.SEVERE, "Unexpected error handling request", exception);
         return build(Response.Status.INTERNAL_SERVER_ERROR, "Unexpected error");
     }
 
