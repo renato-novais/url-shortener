@@ -12,11 +12,15 @@ import java.util.Optional;
 @ApplicationScoped
 public class ShortUrlRepository {
 
-    // @PersistenceUnit injeta a fábrica, não uma instância gerenciada pelo container --
-    // necessário porque com persistence-unit RESOURCE_LOCAL a própria aplicação (não o
-    // container) controla o ciclo de vida da transação via EntityManager.getTransaction().
     @PersistenceUnit(unitName = "urlShortenerPU")
-    EntityManagerFactory entityManagerFactory; // pacote-privado: permite injeção manual em testes do mesmo pacote
+    private EntityManagerFactory entityManagerFactory;
+
+    public ShortUrlRepository() {
+    }
+
+    ShortUrlRepository(EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
+    }
 
     public ShortUrl save(ShortUrl shortUrl) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();

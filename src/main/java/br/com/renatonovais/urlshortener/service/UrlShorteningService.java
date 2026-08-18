@@ -15,10 +15,17 @@ public class UrlShorteningService {
 
     private static final Pattern ALIAS_PATTERN = Pattern.compile("^[a-zA-Z0-9_-]{3,30}$");
 
-    @Inject
-    private ShortUrlRepository repository;
-
+    private final ShortUrlRepository repository;
     private final ShortCodeGenerator codeGenerator = new ShortCodeGenerator();
+
+    protected UrlShorteningService() {
+        this.repository = null;
+    }
+
+    @Inject
+    public UrlShorteningService(ShortUrlRepository repository) {
+        this.repository = repository;
+    }
 
     public synchronized ShortUrl shorten(String originalUrl, String alias) {
         if (!UrlValidator.isValid(originalUrl)) {
